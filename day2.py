@@ -18,13 +18,6 @@ import pandas as pd
 # ## Part 1
 
 # + tags=[]
-df = pd.read_csv('./data/day2_data.csv', header=None, names=['start', 'end', 'letter', 'password'], sep=' |: |-')
-count = 0
-df['letter'] = df.letter.apply(lambda x: set(list(x)))
-df['new_pwd'] = df.password.apply(lambda x: set(list(x)))
-df['occ'] = df.new_pwd - df.letter
-
-# + tags=[]
 f = open('./data/day2_data.csv')
 count = 0
 for line in f:
