@@ -13,66 +13,50 @@
 # ---
 
 import numpy as np
+import pandas as pd
 
 # ## Part 1
 
 # + tags=[]
-f = open('./data/day2_data.txt')
+df = pd.read_csv('./data/day2_data.csv', header=None, names=['start', 'end', 'letter', 'password'], sep=' |: |-')
 count = 0
-for i, line in enumerate(f):
+df['letter'] = df.letter.apply(lambda x: set(list(x)))
+df['new_pwd'] = df.password.apply(lambda x: set(list(x)))
+df['occ'] = df.new_pwd - df.letter
+
+# + tags=[]
+f = open('./data/day2_data.csv')
+count = 0
+for line in f:
     line = line.rstrip('\n')
-    if line[1] != '-':
-        start = int(line[:2])
-        idx = 3
-    else:
-        start = int(line[0])
-        idx = 2
-    if line[idx+1].isspace():
-        end = int(line[idx])
-        idx = idx + 2
-    else:
-        end = int(line[idx:idx+2])
-        idx = idx + 3
-    letter = line[idx]
-    password = line[idx+3:]
-    testline = f'{start}-{end} {letter}: {password}'
-    occ = password.count(letter)
-    if start <= occ <= end:
-        #print(i, testline)
+    line = line.replace('-', ' ')
+    line = line.replace(': ', ' ')
+    lst = line.split()
+    if int(lst[0]) <= lst[-1].count(lst[2]) <= int(lst[1]):
+        print(lst)
         count += 1
 print(count)
 # -
 
 # ## Part 2
 
-# + tags=[]
-f = open('./data/day2_data.txt')
+# + tags=["outputPrepend"]
+f = open('./data/day2_data.csv')
 count = 0
 for i, line in enumerate(f):
     line = line.rstrip('\n')
-    if line[1] != '-':
-        start = int(line[:2])
-        idx = 3
-    else:
-        start = int(line[0])
-        idx = 2
-    if line[idx+1].isspace():
-        end = int(line[idx])
-        idx = idx + 2
-    else:
-        end = int(line[idx:idx+2])
-        idx = idx + 3
-    letter = line[idx]
-    password = line[idx+3:]
-    testline = f'{start}-{end} {letter}: {password}'
-    if len(password)>=end:
-        if ((password[start-1] == letter) != (password[end-1] == letter)):
-            print(letter, password[start-1], password[end-1])
-            print(testline)
+    line = line.rstrip('\n')
+    line = line.replace('-', ' ')
+    line = line.replace(': ', ' ')
+    lst = line.split()
+    if len(lst[-1])>=int(lst[1]):
+        if ((lst[-1][int(lst[0])-1] == lst[2]) != (lst[-1][int(lst[1])-1] == lst[2])):
+            print(lst[2], lst[-1][int(lst[0])-1], lst[-1][int(lst[1])-1])
+            print(lst)
             count+=1
     else:
-        if (password[start-1] == letter):
-            print(letter, password[start-1])
-            print(testline)
+        if (lst[-1][int(lst[0])-1] == lst[2]):
+            print(lst[2], lst[-1][int(lst[0])-1])
+            print(lst)
             count+=1
 print(count)
