@@ -33,6 +33,7 @@ def nr_trees(data, right_step, down_step):
             trees += 1
         else:
             no_tree += 1
+    print(trees)
     return trees, no_tree
 
 
@@ -48,3 +49,5 @@ three = (5, 1)
 four = (7, 1)
 five = (1, 2)
 print(nr_trees(data, *one)[0]*nr_trees(data, *two)[0]*nr_trees(data, *three)[0]*nr_trees(data, *four)[0]*nr_trees(data, *five)[0])
+
+
