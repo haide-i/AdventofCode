@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\isabe\\anaconda3\\envs\\toy\\python.exe"
+    "python.pythonPath": "C:\\Users\\isabe\\anaconda3\\envs\\toy\\python.exe",
+    "C_Cpp.errorSquiggles": "Disabled"
 }
