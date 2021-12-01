@@ -28,9 +28,7 @@ print(increases)
 help_var = np.sum(data[0:3])
 increases = 0
 for i in range(1, len(data[:-2])):
-    # print(data[i])
     curr = np.sum(data[i:i+3])
-    # print(curr)
     if (curr - help_var)>0:
         increases += 1
     help_var = curr
