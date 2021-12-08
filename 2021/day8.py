@@ -39,8 +39,7 @@ print(sum(occurrence.values()))
 # +
 def mapping(patterns):
     mapped = {}
-    mapped['a'] = rule_one(patterns)
-    mapped['c'], mapped['f'] = rule_six(patterns)
+    mapped['a'], mapped['c'], mapped['f'] = rule_one(patterns)
     mapped['b'], mapped['e'] = rule_five(patterns, mapped)
     mapped['d'] = rule_four(patterns, mapped)
     already = [list(x)[0] for x in mapped.values()]
@@ -50,15 +49,11 @@ def mapping(patterns):
     return actually_mapped
 
 def rule_one(inputs):
-    one = next(filter(lambda x : len(x) == 2, inputs), None)
-    seven = next(filter(lambda x : len(x) == 3, inputs), None)
-    return set(seven).difference(set(one))
-
-def rule_six(inputs):
     one = set(next(filter(lambda x : len(x) == 2, inputs), None))
+    seven = next(filter(lambda x : len(x) == 3, inputs), None)
     f = one.intersection(set(next(filter(lambda x : ((len(x)==6) & (len(one.intersection(set(x))) == 1)), inputs), None)))
     c = one.difference(f)
-    return c, f
+    return set(seven).difference(one), c, f
 
 def rule_five(inputs, mapped):
     one = set(next(filter(lambda x : len(x) == 2, inputs), None))
@@ -77,21 +72,21 @@ def rule_four(inputs, mapped):
     return d
 
 def apply_map(string, mapped, numbers):
-    right_string = set([list(mapped[x])[0] for x in string])
-    right_number = [key for key, n in numbers.items() if n==right_string]
-    return right_number[0]
+    right_string = frozenset([list(mapped[x])[0] for x in string])
+    right_number = numbers[right_string]
+    return right_number
 
 def translate(patterns, output):
-    numbers = {0: set(['a', 'b', 'c', 'e', 'f', 'g']),
-               1: set(['c', 'f']),
-               2: set(['a', 'c', 'd', 'e', 'g']),
-               3: set(['a', 'c', 'd', 'f', 'g']),
-               4: set(['b', 'c', 'd', 'f']),
-               5: set(['a', 'b', 'd', 'f', 'g']),
-               6: set(['a', 'b', 'd', 'e', 'f', 'g']),
-               7: set(['a', 'c', 'f']),
-               8: set(['a', 'b', 'c', 'd', 'e', 'f', 'g']),
-               9: set(['a', 'b', 'c', 'd', 'f', 'g'])}
+    numbers = {frozenset('abcefg'): 0,
+               frozenset('cf'): 1,
+               frozenset('acdeg'): 2,
+               frozenset('acdfg'): 3,
+               frozenset('bcdf'): 4,
+               frozenset('abdfg'): 5,
+               frozenset('abdefg'): 6,
+               frozenset('acf'): 7,
+               frozenset('abcdefg'): 8,
+               frozenset('abcdfg'): 9}
     mapped = mapping(patterns)
     output_numbers = [str(apply_map(x, mapped, numbers)) for x in output]
     final = int("".join(output_numbers))
@@ -103,4 +98,3 @@ def translate(patterns, output):
 output_values = list(map(lambda x, y: translate(x, y), patterns, output))
 result = sum(output_values)
 print(result)
-
